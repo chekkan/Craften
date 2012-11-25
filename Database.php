@@ -45,7 +45,7 @@ namespace Craften {
                 if ($configuration)
                 {
                     $configuration = $configuration->initialize();
-                    $parsed = $configuration->parse("../application/configuration/database");
+                    $parsed = $configuration->parse("../app/configuration/database");
                     
                     if (!empty($parsed->database->default) && !empty($parsed->database->default->type))
                     {

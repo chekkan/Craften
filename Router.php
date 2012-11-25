@@ -108,27 +108,26 @@ namespace Craften {
                     $parameters = array_slice($parts, 2);
                 }
             }
-            
+                        
             $this->_pass($controller, $action, $parameters);
         }
         
         protected function _pass($controller, $action, $parameters = array())
         {
-            $name = ucfirst($controller);
+            $name = "\\app\\controllers\\".ucfirst($controller);
+            $name = $name;
             
-            $this->_controller = $controller;
+            $this->_controller = "\\app\\controllers\\{$controller}";
             $this->_action = $action;
             
             try
             {
-                $instance = new $name(array(
-                    "parameters" => $parameters
-                ));
+                $instance = new $name(array("parameters" => $parameters ));
                 Registry::set("controller", $instance);
             }
-            catch (Exception $e)
+            catch (\Exception $e)
             {
-                throw new \Exception\Controller("Controller {$name} not found");
+                throw new Exception\Controller("Controller {$name} not found");
             }
             
             if(!method_exists($instance, $action))
@@ -136,7 +135,7 @@ namespace Craften {
                 $instance->willRenderLayoutView = false;
                 $instance->willRenderActionView = false;
                 
-                throw new \Exception\Action("Action {$action} not found");
+                throw new Exception\Action("Action {$action} not found");
             }
             
             $inspector = new Inspector($instance);
