@@ -12,6 +12,10 @@
  */
 
 namespace Craften\Database {
+    
+    use Craften\Base as Base;
+    use Craften\ArrayMethods as ArrayMethods;
+    use Craften\Database\Exception as Exception;
 
     class Query extends Base
     {
@@ -105,7 +109,7 @@ namespace Craften\Database {
             $where = $order = $limit = $join = "";
             $template = "SELECT %s FROM %s %s %s %s %s";
             
-            foreach ($this->fields as $table => $_fields)
+            foreach ($this->_fields as $table => $_fields)
             {
                 foreach ($_fields as $field => $alias)
                 {
@@ -119,35 +123,36 @@ namespace Craften\Database {
                     }
                 }
             }
-            
+
             $fields = join(", ", $fields);
-            
+
             $_join = $this->join;
-            if(!empty($_join))
+            
+            if (!empty($_join))
             {
                 $join = join(" ", $_join);
             }
-            
+
             $_where = $this->where;
-            if(!empty($_where))
+            if (!empty($_where))
             {
                 $joined = join(" AND ", $_where);
                 $where = "WHERE {$joined}";
             }
-            
+
             $_order = $this->order;
-            if(!empty($_order))
+            if (!empty($_order))
             {
                 $_direction = $this->direction;
                 $order = "ORDER BY {$_order} {$_direction}";
             }
-            
+
             $_limit = $this->limit;
-            if(!empty($_limit))
+            if (!empty($_limit))
             {
                 $_offset = $this->offset;
-                
-                if($_offset)
+
+                if ($_offset)
                 {
                     $limit = "LIMIT {$_limit}, {$_offset}";
                 }
@@ -156,7 +161,7 @@ namespace Craften\Database {
                     $limit = "LIMIT {$_limit}";
                 }
             }
-            
+
             return sprintf($template, $fields, $this->from, $join, $where, $order, $limit);
         }
         
@@ -164,15 +169,15 @@ namespace Craften\Database {
         {
             $fields = array();
             $values = array();
-            $template = "INSERT INTO '%s' ('%s') VALUES (%s)";
+            $template = "INSERT INTO %s (%s) VALUES ('%s')";
             
             foreach ($data as $field => $value)
             {
                 $fields[] = $field;
-                $values[] = $this->_quote($value);
+                $values[] = $value;
             }
             
-            $fields = join("', '", $fields);
+            $fields = join(", ", $fields);
             $values = join("', '", $values);
             
             return sprintf($template, $this->from, $fields, $values);
@@ -204,6 +209,8 @@ namespace Craften\Database {
                 $_offset = $this->offset;
                 $limit = "LIMIT {$_limit} {$_offset}";
             }
+            
+            
             
             return sprintf($template, $this->from, $parts, $where, $limit);
         }
@@ -259,8 +266,8 @@ namespace Craften\Database {
                 throw new Exception\Argument("Invalid argument");
             }
             
-            $this->_fields = $fields;
-            $this->_join = "JOIN {$join} ON {$on}";
+            $this->_fields += array($join => $fields);
+            $this->_join += array("JOIN {$join} ON {$on}");
             
             return $this;
         }
@@ -275,6 +282,19 @@ namespace Craften\Database {
             $this->_limit = $limit;
             $this->_offset = $limit * ($page - 1);
             
+            return $this;
+        }
+        
+        public function order($order, $direction = "asc")
+        {
+            if (empty($order))
+            {
+                throw new Exception\Argument("Invalid argument");
+            }
+
+            $this->_order = $order;
+            $this->_direction = $direction;
+
             return $this;
         }
         
@@ -316,7 +336,7 @@ namespace Craften\Database {
             
             if($result == false)
             {
-                throw new Exception\Sql();
+                throw new Exception\Sql($sql);
             }
             
             if($isInsert)
@@ -339,27 +359,6 @@ namespace Craften\Database {
             return $this->_connector->affectedRows;
         }
         
-        public function all()
-        {
-            $sql = $this->_buildSelect();
-            $result = $this->_connector->execute($sql);
-            
-            if($result == false)
-            {
-                $error = $this->_connector->lastError;
-                throw new Exception("There was an error with your SQL query: {$error}");
-            }
-            
-            $rows = array();
-            
-            for ($i=0; $i<$result->num_rows; $i++)
-            {
-                $rows[] = $result->fetch_array(MYSQL_ASSOC);
-            }
-            
-            return $rows;
-        }
-        
         public function first()
         {
             $limit = $this->_limit;
@@ -379,7 +378,7 @@ namespace Craften\Database {
                 $this->_offset = $offset;
             }
             
-            return first;
+            return $first;
         }
         
         public function count()
@@ -408,7 +407,7 @@ namespace Craften\Database {
                 $this->_offset = $offset;
             }
             
-            return $row["rows"];
+            return $row->rows;
         }
     }
 

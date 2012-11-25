@@ -76,7 +76,7 @@ namespace Craften
                 foreach ($matches as $match)
                 {
                     $parts = ArrayMethods::clean(
-                        ArrayMethod::trim(
+                        ArrayMethods::trim(
                             StringMethods::split($match, "[\s]", 2)
                         )
                     );

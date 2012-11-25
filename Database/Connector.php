@@ -12,6 +12,9 @@
  */
 
 namespace Craften\Database {
+    
+    use Craften\Base as Base;
+    use Craften\Database\Exception as Exception;
 
     class Connector extends Base {
         public function initialize()

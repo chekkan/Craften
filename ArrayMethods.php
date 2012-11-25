@@ -75,6 +75,11 @@ namespace Craften
             return $return;
         }
         
+        public function first($array)
+        {
+            return array_shift($array);
+        }
+        
     }
 
     

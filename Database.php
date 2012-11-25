@@ -12,6 +12,10 @@
  */
 
 namespace Craften {
+    
+    use Craften\Base as Base;
+    use Craften\Database as Database;
+    use Craften\Database\Exception as Exception;
 
     class Database extends Base 
     {

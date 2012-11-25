@@ -12,6 +12,9 @@
  */
 
 namespace Craften\Database\Connector {
+    
+    use Craften\Database as Database;
+    use Craften\Database\Exception as Exception;
 
     class Mysql extends Database\Connector
     {
@@ -61,7 +64,7 @@ namespace Craften\Database\Connector {
         protected function _isValidService()
         {
             $isEmpty = empty($this->_service);
-            $isInstance = $this->_service instanceof \MySQLi;
+            $isInstance = $this->_service instanceof \mysqli;
             
             if($this->isConnected && $isInstance && !$isEmpty)
             {
@@ -76,7 +79,7 @@ namespace Craften\Database\Connector {
         {
             if(!$this->_isValidService())
             {
-                $this->_service = new MySQLi(
+                $this->_service = new \mysqli(
                         $this->_host,
                         $this->_username,
                         $this->_password,
@@ -84,7 +87,7 @@ namespace Craften\Database\Connector {
                         $this->_port
                         );
                 
-                if($this->_server->connect_error)
+                if($this->_service->connect_error)
                 {
                     throw new Exception\Service("Unable to connect to service");
                 }
@@ -145,7 +148,7 @@ namespace Craften\Database\Connector {
                 throw new Exception\Service("Not connected to a valid service");
             }
             
-            return $this->_service->insert_id();
+            return $this->_service->insert_id;
         }
         
         // returns the number of rows affected

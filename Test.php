@@ -63,7 +63,11 @@ namespace Craften
                $exceptions[] = array(
                  "set" => $test["set"],
                  "title" => $test["title"],
-                 "type" => get_class($e)
+                 "type" => get_class($e),
+                 "message" => $e->getMessage(),
+                 "filename" => $e->getFile(),
+                 "line" => $e->getLine(),
+                 "code" => $e->getCode()
                  );
               }
             }
