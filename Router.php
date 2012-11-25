@@ -115,9 +115,8 @@ namespace Craften {
         protected function _pass($controller, $action, $parameters = array())
         {
             $name = "\\app\\controllers\\".ucfirst($controller);
-            $name = $name;
             
-            $this->_controller = "\\app\\controllers\\{$controller}";
+            $this->_controller = $controller;
             $this->_action = $action;
             
             try
