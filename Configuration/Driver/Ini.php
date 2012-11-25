@@ -14,6 +14,7 @@
 namespace Craften\Configuration\Driver {
 
     use Craften\Configuration as Configuration;
+    use Craften\Configuration\Driver\Exception as Exception;
     
     class Ini extends Configuration\Driver {
         
@@ -27,7 +28,7 @@ namespace Craften\Configuration\Driver {
                 {
                     $config[$parts[0]] = array();
                 }
-                $config[$parts[0]] = $this->_pair($parts[0], $parts[1], $value);
+                $config[$parts[0]] = $this->_pair($config[$parts[0]], $parts[1], $value);
             }
             else
             {
@@ -65,7 +66,7 @@ namespace Craften\Configuration\Driver {
                     $config = $this->_pair($config, $key, $value);
                 }
                 
-                $this->_parsed[$path] = ArrayMethods::toObect($config);
+                $this->_parsed[$path] = \Craften\ArrayMethods::toObject($config);
             }
             
             return $this->_parsed[$path];

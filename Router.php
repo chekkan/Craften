@@ -12,6 +12,9 @@
  */
 
 namespace Craften {
+    
+    use Craften\Base as Base;
+    use Craften\Router\Exception as Exception;
 
     class Router extends Base {
         /**
@@ -106,7 +109,7 @@ namespace Craften {
                 }
             }
             
-            $this->_parse($controller, $action, $parameters);
+            $this->_pass($controller, $action, $parameters);
         }
         
         protected function _pass($controller, $action, $parameters = array())

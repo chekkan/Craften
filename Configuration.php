@@ -16,7 +16,7 @@ namespace Craften
     
     class Configuration extends Base {
         /**
-         * @ readwrite 
+         * @readwrite 
          */
         protected $_type;
         

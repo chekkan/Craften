@@ -12,6 +12,8 @@
  */
 
 namespace Craften\Configuration {
+    
+    use Craften\Base as Base;
 
     class Driver extends Base {
         

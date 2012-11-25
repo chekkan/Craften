@@ -12,6 +12,7 @@
  */
 namespace Craften
 {
+    use Craften\Core\Exception as Exception;
     
     class Base {
         
@@ -101,17 +102,17 @@ namespace Craften
         
         protected function _getExceptionForReadonly($property)
         {
-            return new \Exception\ReadOnly("{$property} is read-only");
+            return new Exception\ReadOnly("{$property} is read-only");
         }
         
         protected function _getExceptionForWriteonly($property)
         {
-            return new \Exception\WriteOnly("{$property} is write-only");
+            return new Exception\WriteOnly("{$property} is write-only");
         }
         
         protected function _getExceptionForProperty($property)
         {
-            return new \Exception\Property("Invalid {$property}");
+            return new Exception\Property("Invalid {$property}");
         }
         
         protected function _getExceptionForImplementation($method)

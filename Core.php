@@ -30,7 +30,7 @@ namespace Craften {
 
             foreach ($paths as $path)
             {
-                $combined = $path.DIRECTORY_SEPARATOR.$file;
+                $combined = APP_PATH.DIRECTORY_SEPARATOR.$path.DIRECTORY_SEPARATOR.$file;
 
                 if (file_exists($combined))
                 {

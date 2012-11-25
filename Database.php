@@ -36,7 +36,31 @@ namespace Craften {
         
         public function initialize()
         {
-            if(!$this->type)
+            $type = $this->getType();
+    
+            if (empty($type))
+            {
+                $configuration = Registry::get("configuration");
+
+                if ($configuration)
+                {
+                    $configuration = $configuration->initialize();
+                    $parsed = $configuration->parse("../application/configuration/database");
+                    
+                    if (!empty($parsed->database->default) && !empty($parsed->database->default->type))
+                    {
+                        $type = $parsed->database->default->type;
+                        unset($parsed->database->default->type);
+
+                        $this->__construct(array(
+                            "type" => $type,
+                            "options" => (array) $parsed->database->default
+                        ));
+                    }
+                }
+            }
+
+            if (empty($type))
             {
                 throw new Exception\Argument("Invalid type");
             }
