@@ -31,7 +31,7 @@ namespace Craften {
         /**
          * @readwrite
          */
-        protected $viewPath = "app\\View";
+        protected $viewPath = "View";
         
         protected $viewExtension = "tpl";
         
@@ -44,7 +44,7 @@ namespace Craften {
             $action = ucfirst($router->getAction());
             
             $this->view = new View(array(
-               "file" => APP_PATH."\\{$this->viewPath}\\{$controller}\\{$action}.tpl"
+               "file" => ROOT.DS.APP_PATH.DS.$this->viewPath.DS.$controller.DS.$action.".tpl"
             ));
         }
         
